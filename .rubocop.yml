@@ -1,0 +1,86 @@
+# I can't get the requires to work with sublime:
+# SEE: https://github.com/pderichs/sublime_rubocop/issues/66
+# -- https://gist.github.com/topher6345/4f921ca3e7938132563e
+# -- https://forum.sublimetext.com/t/run-command-after-saving-file/44016
+# -- https://medium.com/devnetwork/running-rubocop-only-on-modified-files-a21aed86e06d
+# -- https://code.tutsplus.com/tutorials/how-to-create-a-sublime-text-2-plugin--net-22685
+
+# -- https://github.com/SublimeLinter/SublimeLinter-rubocop/issues/19
+#    -- https://github.com/fnando/sublime-codefmt
+#    -- https://github.com/fnando/sublime-switch-case
+#    -- https://github.com/fnando/sublime-rubocop-completion/issues/1
+# required these fixes:
+#    -- install PackageDev https://forum.sublimetext.com/t/pathlib-not-found-in-purchased-version/49978
+#    -- download all 3 packages via git clone rather than package manager
+#    -- renamed several files and directories to match
+#    -- brew update
+#    -- brew doctor
+#    -- brew install prettier yapf
+
+require:
+  - rubocop-performance
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 2.5
+  NewCops: enable
+
+Style/Documentation:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - "**/*.rake"
+    - "config/**/*"
+    - "Rakefile"
+    - "spec/**/*.rb"
+    - "*.gemspec"
+
+Layout/LineLength:
+  Max: 120
+
+Style/BlockComments:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/RedundantBegin:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+
+Style/WordArray:
+  EnforcedStyle: brackets
+
+Metrics/MethodLength:
+  Max: 15
+
+Style/HashSyntax:
+  Enabled: false
+
+Style/StringHashKeys:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Layout/DotPosition:
+  Enabled: false
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - "spec/**/*"
+
+RSpec/NamedSubject:
+  Enabled: false
+# Rails:
+#   Enabled: true
+
