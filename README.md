@@ -1,5 +1,9 @@
 # Active Webhook
 
+[![Build Status](https://travis-ci.com/amazing-jay/active_webhook.svg?branch=master)](https://travis-ci.com/amazing-jay/active_webhook)
+[![Test Coverage](https://codecov.io/gh/amazing-jay/active_webhook/graph/badge.svg)](https://codecov.io/gh/amazing-jay/active_webhook)
+
+
 Simple, efficient, extensible webhooks for Ruby.
 
 Features include:
@@ -10,8 +14,9 @@ Features include:
 - Buffered Delivery
 - Versioning
 
+## What does an Active Webhook look like?
 
-By way of example, ActiveWebhook delivers HTTP POST requests as follows (_See the "Configuration" and "Customization" sections to learn more_).:
+By default, ActiveWebhook delivers HTTP POST requests as follows:
 
 ```json
 {
@@ -30,6 +35,8 @@ By way of example, ActiveWebhook delivers HTTP POST requests as follows (_See th
   "body": "{\"data\":{}}"
 }
 ```
+
+(_See the "Configuration" and "Customization" sections to learn more_)
 
 ## Requirements
 
@@ -62,7 +69,7 @@ Source code can be downloaded on GitHub
     $ rails g active_webhook:install
     $ rails db:migrate
 
-### Define topics that you want make available for your application
+### Define topics that you want to make available for your application
 
 #### Via Console
 
@@ -165,7 +172,7 @@ class User < ApplicationRecord
   # this:
   trigger_webhook(:reminded)
   # is more-or-less equivalent to an optomized version of this:
-  ActiveWebhook.trigger(key: 'user/reminded', data: self.as_json, type: "resource")
+  # ActiveWebhook.trigger(key: 'user/reminded', data: self.as_json, type: "resource")
 end
 ```
 
