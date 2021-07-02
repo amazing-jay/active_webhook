@@ -15,32 +15,38 @@ Features include:
 
 ## What does an Active Webhook look like?
 
-By default, ActiveWebhook delivers HTTP POST requests as follows:
+By default, ActiveWebhook delivers HTTP POST requests with the following:
+
+#### HEADERS
 
 ```json
 {
-  "url": "http://test.com/callback/82",
-  "headers": {
-    "Content-Type": "application/json",
-    "User-Agent": "Active Webhook v0.1.0",
-    "Origin": "http://my-custom-domain.com",
-    "X-Hmac-SHA256": "iDCMPCGuPaq3F9hhEYdcBmIBU6aVOEZakS8GmJbLzoU=",
-    "X-Time": "2021-06-29 06:20:26 UTC",
-    "X-Topic": "abcdef",
-    "X-Topic-Version": "3.73",
-    "X-Webhook-Type": "event",
-    "X-Webhook-Id": "6f35615cb30a6c51a29bedeb"
+  "Content-Type": "application/json",
+  "User-Agent": "Active Webhook v0.1.0",
+  "Origin": "http://my-custom-domain.com",
+  "X-Hmac-SHA256": "iDCMPCGuPaq3F9hhEYdcBmIBU6aVOEZakS8GmJbLzoU=",
+  "X-Time": "2021-06-29 06:20:26 UTC",
+  "X-Topic": "abcdef",
+  "X-Topic-Version": "3.73",
+  "X-Webhook-Type": "event",
+  "X-Webhook-Id": "6f35615cb30a6c51a29bedeb"
   },
-  "body": "{\"data\":{}}"
 }
 ```
 
-(_See the "Configuration" and "Customization" sections to learn more_)
+#### BODY
+```json
+{
+  "data": {}
+}
+```
+
+_See the [Configuration](https://github.com/amazing-jay/active_webhook#configuration) and [Customization](https://github.com/amazing-jay/active_webhook#customization) sections to learn more._
 
 ## Requirements
 
 Active Webhook supports (_but does not require_) Rails 5+ and various queuing
-and delivery technologies (e.g. Sidekiq, Faraday, etc.).
+and delivery technologies (e.g. Sidekiq, Delayed Job, Active Job, Net HTTP, Faraday, etc.).
 
 ## Download and Installation
 
@@ -70,13 +76,6 @@ Source code can be downloaded on GitHub
 
 ### Define topics that you want to make available for your application
 
-#### Via Console
-
-    $ rails c
-    > ActiveWebhook::Topic.create(key: 'user/created': version: '1.1')
-
-_note: if you do omit a value for`version` when creating a Topic, ActiveWebhook will attempt to autoincrement one for you._
-
 #### Via Migration _(recommended)_
 
     $ rails g migration create_active_webhook_topics
@@ -89,6 +88,7 @@ Then edit the migration file:
 # This is just an example, you can define any topic keys that you want to define
 class CreateActiveWebhookTopics < ActiveRecord::Migration[4.2]
   def change
+    # If you do omit a value for`version` when creating a Topic, ActiveWebhook will autoincrement one for you.
     ActiveWebhook::Topic.create(key: "user/created")
   end
 end
@@ -99,6 +99,12 @@ And migrate:
     $ rails db:migrate
     $ rails db:test:prepare
 
+#### Or Console
+
+    $ rails c
+    > ActiveWebhook::Topic.create(key: 'user/created': version: '1.1')
+
+
 ## Usage
 
 ### Triggering webhooks
@@ -108,7 +114,7 @@ To trigger the delivery of a topic, simply execute `ActiveWebhook.trigger(key: k
 
 ### Options
 
-The `trigger` method also accepts any number of optional kwarg arguments, some of which have special meaning:
+The `trigger` method accepts any number of optional kwarg arguments, some of which have special meaning:
 
 - `version` is a string that scopes delivery of Topics by version (if omitted, all topics with matching key will be triggered during the queuing phase).
 - `format_first` is a boolean that overrides the default configuration value during the queueing phase.
@@ -217,12 +223,18 @@ To register a Subscription, simply execute
 e.g.
 
 ```ruby
-ActiveWebhook::Subscription.create(callback_url: 'http://myappdomain.com/webhooks', topic: ActiveWebhook::Topic.find_by_key('user/created'))
+ActiveWebhook::Subscription.create(
+  callback_url: 'http://myappdomain.com/webhooks',
+  topic: ActiveWebhook::Topic.find_by_key('user/created')
+)
 # or
-ActiveWebhook::Subscription.create(callback_url: 'http://myappdomain.com/webhooks', topic: ActiveWebhook::Topic.where(key: 'user/deleted', version: '1.1').first)
+ActiveWebhook::Subscription.create(
+  callback_url: 'http://myappdomain.com/webhooks',
+  topic: ActiveWebhook::Topic.where(key: 'user/deleted', version: '1.1').first
+)
 ```
 
-_NOTE: See the Customization section to learn how to setup self-registration for your users._
+_NOTE: See the [Self Subscription](https://github.com/amazing-jay/active_webhook#example-2--enable-users-to-self-subscribe-for-the-topics-that-they-care-about) section to learn how to setup self-registration for your users._
 
 ## Configuration
 
@@ -433,10 +445,10 @@ end
 
 For more information, see the files located at:
 
-- (lib/active_webhook/queueing)[https://github.com/amazing-jay/active_webhook/tree/master/lib/active_webhook/queueing]
-- (lib/active_webhook/delivery)[https://github.com/amazing-jay/active_webhook/tree/master/lib/active_webhook/delivery]
-- (lib/active_webhook/verification)[https://github.com/amazing-jay/active_webhook/tree/master/lib/active_webhook/verification]
-- (lib/active_webhook/formatting)[https://github.com/amazing-jay/active_webhook/tree/master/lib/active_webhook/formatting]
+- [lib/active_webhook/queueing](https://github.com/amazing-jay/active_webhook/tree/master/lib/active_webhook/queueing)
+- [lib/active_webhook/delivery](https://github.com/amazing-jay/active_webhook/tree/master/lib/active_webhook/delivery)
+- [lib/active_webhook/verification](https://github.com/amazing-jay/active_webhook/tree/master/lib/active_webhook/verification)
+- [lib/active_webhook/formatting](https://github.com/amazing-jay/active_webhook/tree/master/lib/active_webhook/formatting)
 
 ## Development
 
@@ -462,10 +474,10 @@ The gem is available as open source under the terms of the
 
 ## ROADMAP
 
-* Research how to add XML format
-* Dummy app; Use a single config file and local subscription class
+* Figure out flakey. specs
+* Add XML format
+* Dummy app; create a local subscription class
 * Upgrade callbacks_spec to use a real model and table defined in a migration
 * Upgrade logger spec to expect stubbed logger to receive and call original (and drop the rest)
 * Disable subscriptions when jobs stop
-* Figure out flakey
 * Consolidate formatting adapters and configuration options into a single builder

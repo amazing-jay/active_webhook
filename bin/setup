@@ -5,5 +5,4 @@ set -vx
 
 bundle install
 bundle exec rake db:reset
-bundle exec rspec spec
 

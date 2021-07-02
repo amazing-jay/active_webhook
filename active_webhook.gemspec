@@ -72,35 +72,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "sidekiq", "~> 6.2.1"
   spec.add_development_dependency "rspec-sidekiq", "~> 3.1.0"
   spec.add_development_dependency "webmock", "~> 3.13"
-
-  # spec.add_development_dependency "activesupport"
-  # spec.add_development_dependency "awesome_print"
-  # spec.add_development_dependency "bundler", "~> 1.17"
-  # spec.add_development_dependency "database_cleaner"
-  # spec.add_development_dependency "dotenv", "~> 2.5"
-  # spec.add_development_dependency "factory_bot"
-  # spec.add_development_dependency "faraday"
-  # spec.add_development_dependency "faker"
-  # spec.add_development_dependency "listen"
-  # spec.add_development_dependency "pry-byebug"
-
-  # must come before those below
-  # if ENV['TEST_RAILS_VERSION'].nil?
-  #   spec.add_development_dependency 'rails', '~> 6.1.3.2'
-  # else
-  #   spec.add_development_dependency 'rails', ENV['TEST_RAILS_VERSION'].to_s
-  # end
-
-  # spec.add_development_dependency "rake", "~> 10.0"
-  # spec.add_development_dependency "rspec", "~> 3.0"
-  # spec.add_development_dependency "rspec-rails"
-  # spec.add_development_dependency "rubocop", "~> 0.60"
-  # spec.add_development_dependency "rubocop-performance", "~> 1.5"
-  # spec.add_development_dependency "rubocop-rspec", "~> 1.37"
-  # spec.add_development_dependency "simplecov", "~> 0.16"
-  # spec.add_development_dependency "sqlite3", "~> 1.4.2"
-  # spec.add_development_dependency "sidekiq"
-  # spec.add_development_dependency "rspec-sidekiq"
-  # spec.add_development_dependency "webmock"
-  # spec.add_development_dependency "delayed_job_active_record"
 end
