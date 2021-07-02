@@ -40,7 +40,7 @@ By default, ActiveWebhook delivers HTTP POST requests as follows:
 ## Requirements
 
 Active Webhook supports (_but does not require_) Rails 5+ and various queuing
-and delivery technologies (e.g. sidekiq, faraday, etc.).
+and delivery technologies (e.g. Sidekiq, Faraday, etc.).
 
 ## Download and Installation
 
