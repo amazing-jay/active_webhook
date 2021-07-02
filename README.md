@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.com/amazing-jay/active_webhook.svg?branch=master)](https://travis-ci.com/amazing-jay/active_webhook)
 [![Test Coverage](https://codecov.io/gh/amazing-jay/active_webhook/graph/badge.svg)](https://codecov.io/gh/amazing-jay/active_webhook)
 
-
 Simple, efficient, extensible webhooks for Ruby.
 
 Features include:
