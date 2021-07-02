@@ -459,3 +459,13 @@ https://github.com/amazing-jay/active_webhook.
 
 The gem is available as open source under the terms of the
 [MIT License](https://opensource.org/licenses/MIT).
+
+## ROADMAP
+
+* Research how to add XML format
+* Dummy app; Use a single config file and local subscription class
+* Upgrade callbacks_spec to use a real model and table defined in a migration
+* Upgrade logger spec to expect stubbed logger to receive and call original (and drop the rest)
+* Disable subscriptions when jobs stop
+* Figure out flakey
+* Consolidate formatting adapters and configuration options into a single builder
