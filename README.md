@@ -67,6 +67,16 @@ Or install it yourself as:
 Source code can be downloaded on GitHub
 [github.com/amazing-jay/active_webhook/tree/master](https://github.com/amazing-jay/active_webhook/tree/master)
 
+## Key Terms
+
+A Webhook is a single HTTP POST request that is sent to a url that you specify, and is typically triggered by the occurrence of a specific, predefined event. Active Webhooks contain a formatted payload in the body and metadata in the headers.
+
+
+A Webhook Topic is a persisted data object (ActiveRecord). Each record describes a specific type of event that triggers a webhook, and is uniquely identified by a key (e.g. “user/created”) and version (e.g. “1.1”).
+
+
+A Webhook Subscription is also a persisted data object (ActiveRecord). Each record describes a webhook topic that you want to receive notifications about and a callback url.
+
 ## Setup
 
 ### Generate required files
