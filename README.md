@@ -66,16 +66,6 @@ Or install it yourself as:
 Source code can be downloaded on GitHub
 [github.com/amazing-jay/active_webhook/tree/master](https://github.com/amazing-jay/active_webhook/tree/master)
 
-## Key Terms
-
-A Webhook is a single HTTP POST request that is sent to a url that you specify, and is typically triggered by the occurrence of a specific, predefined event. Active Webhooks contain a formatted payload in the body and metadata in the headers.
-
-
-A Webhook Topic is a persisted data object (ActiveRecord). Each record describes a specific type of event that triggers a webhook, and is uniquely identified by a key (e.g. “user/created”) and version (e.g. “1.1”).
-
-
-A Webhook Subscription is also a persisted data object (ActiveRecord). Each record describes a webhook topic that you want to receive notifications about and a callback url.
-
 ## Setup
 
 ### Generate required files
@@ -83,9 +73,10 @@ A Webhook Subscription is also a persisted data object (ActiveRecord). Each reco
     $ rails g active_webhook:install
     $ rails db:migrate
 
-### Define topics that you want to make available for your application
+### Create webhook topics
 
-#### Via Migration _(recommended)_
+A **Webhook Topic** is a persisted data object (ActiveRecord) that describes a specific type of event which triggers a webhook, and is uniquely identified by a key (e.g. “user/created”) and version (e.g. “1.1”).
+
 
     $ rails g migration create_active_webhook_topics
 
@@ -108,11 +99,33 @@ And migrate:
     $ rails db:migrate
     $ rails db:test:prepare
 
-#### Or Console
+### Create webhook subscriptions
 
-    $ rails c
-    > ActiveWebhook::Topic.create(key: 'user/created': version: '1.1')
+A **Webhook Subscription** is a persisted data object (ActiveRecord) that describes a webhook topic which you want to receive notifications about, and a callback url.
 
+When a Topic is triggered, Active Webhook will attempt delivery of each Subscription registered for that topic. You can create multiple subscriptions for the same topic.
+
+To register a Subscription, simply execute
+`ActiveWebhook::Subscription.create(callback_url: url, topic: topic)`, where:
+
+- `callback_url` is a required string that must be a valid URL
+- `topic` is a previously defined Topic
+
+e.g.
+
+```ruby
+ActiveWebhook::Subscription.create(
+  callback_url: 'http://myappdomain.com/webhooks',
+  topic: ActiveWebhook::Topic.find_by_key('user/created')
+)
+# or
+ActiveWebhook::Subscription.create(
+  callback_url: 'http://myappdomain.com/webhooks',
+  topic: ActiveWebhook::Topic.where(key: 'user/deleted', version: '1.1').first
+)
+```
+
+_See the [Self Subscription](https://github.com/amazing-jay/active_webhook#example-2--enable-users-to-self-subscribe-for-the-topics-that-they-care-about) section to learn how to setup self-registration for your users._
 
 ## Usage
 
@@ -143,7 +156,7 @@ ActiveWebhook.trigger(key: 'user/deleted', version: '1.1')
 ActiveWebhook.trigger(key: 'user/deleted', data: { id: 1 }, my_option: 'random_value')
 ```
 
-### ActiveRecord Callbacks
+### ActiveRecord callbacks
 
 The following convenience methods are available when working with ActiveRecord objects:
 
@@ -193,7 +206,7 @@ class User < ApplicationRecord
 end
 ```
 
-#### Defining topics for ActiveRecord callbacks
+#### Defining topics for activeRecord callbacks
 
 Don't forget to create topics for each of the models that you want to enable ActiveRecord callbacks for.
 
@@ -219,38 +232,9 @@ class CreateActiveWebhookTopics < ActiveRecord::Migration[4.2]
 end
 ```
 
-## Subscribing to topics
-
-When a Topic is triggered, Active Webhook will attempt delivery for each
-Subscription registered with the specified topic & version.
-
-You can create multiple subscriptions for the same topic.
-
-To register a Subscription, simply execute
-`ActiveWebhook::Subscription.create(callback_url: url, topic: topic)`, where:
-
-- `callback_url` is a required string that must be a valid URL
-- `topic` is a previously defined Topic
-
-e.g.
-
-```ruby
-ActiveWebhook::Subscription.create(
-  callback_url: 'http://myappdomain.com/webhooks',
-  topic: ActiveWebhook::Topic.find_by_key('user/created')
-)
-# or
-ActiveWebhook::Subscription.create(
-  callback_url: 'http://myappdomain.com/webhooks',
-  topic: ActiveWebhook::Topic.where(key: 'user/deleted', version: '1.1').first
-)
-```
-
-_NOTE: See the [Self Subscription](https://github.com/amazing-jay/active_webhook#example-2--enable-users-to-self-subscribe-for-the-topics-that-they-care-about) section to learn how to setup self-registration for your users._
-
 ## Configuration
 
-_NOTE: See `config/active_webhook.rb` for details about all available configuration options._
+_NOTE: See [config/active_webhook.rb](https://github.com/amazing-jay/active_webhook/blob/master/lib/generators/templates/active_webhook_config.rb) for details about all available configuration options._
 
 ### Adapters
 
