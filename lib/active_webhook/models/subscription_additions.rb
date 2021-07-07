@@ -6,7 +6,7 @@ module ActiveWebhook
       extend ActiveSupport::Concern
 
       included do
-        self.table_name = "active_webhook_subscriptions"
+        self.table_name = 'active_webhook_subscriptions'
 
         scope :enabled, -> { where(disabled_at: nil) }
 
@@ -21,19 +21,19 @@ module ActiveWebhook
       end
 
       def set_disabled_reason
-        self.disabled_reason = nil if self.disabled_at.nil?
+        self.disabled_reason = nil if disabled_at.nil?
       end
 
       def clean_error_log
         error_logs.delete_all if previous_changes.key?(:disabled_at) && enabled?
       end
 
-      def ensure_error_log_requirement_is_met! max_errors_per_hour
+      def ensure_error_log_requirement_is_met!(max_errors_per_hour)
         return false if disabled?
 
         if max_errors_per_hour.present? && error_logs.where('created_at > ?', 1.hour.ago).count > max_errors_per_hour
           disable! "Exceeded max_errors_per_hour of (#{max_errors_per_hour})"
-          return true
+          true
         end
       rescue StandardError
         # intentionally squash errors so that we don't end up in a loop where queue adapter retries and locks table

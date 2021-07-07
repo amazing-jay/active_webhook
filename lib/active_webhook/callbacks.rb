@@ -5,15 +5,15 @@ module ActiveWebhook
     class InvalidCallbackError < StandardError; end
     extend ActiveSupport::Concern
 
-    SUPPORTED_CALLBACKS = %i(created updated deleted).freeze
+    SUPPORTED_CALLBACKS = %i[created updated deleted].freeze
 
     class_methods do
       def trigger_webhooks(version: nil, only: nil, except: [], **_options)
         callbacks = if only.nil?
-          SUPPORTED_CALLBACKS
-        else
-          Array.wrap(only).map(&:to_sym)
-        end - Array.wrap(except).map(&:to_sym)
+                      SUPPORTED_CALLBACKS
+                    else
+                      Array.wrap(only).map(&:to_sym)
+                    end - Array.wrap(except).map(&:to_sym)
 
         callbacks.each do |callback|
           unless SUPPORTED_CALLBACKS.include? callback
@@ -42,7 +42,7 @@ module ActiveWebhook
     end
 
     def trigger_webhook(key, version: nil, type: 'resource', **context)
-      key = [self.class.name.underscore, key].join("/") unless key.is_a?(String)
+      key = [self.class.name.underscore, key].join('/') unless key.is_a?(String)
       context[:resource_id] ||= id
       context[:resource_type] ||= self.class.name
 

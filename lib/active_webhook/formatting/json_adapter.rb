@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "json"
+require 'json'
 
 module ActiveWebhook
   module Formatting
@@ -8,7 +8,7 @@ module ActiveWebhook
       protected
 
       def content_type
-        "application/json"
+        'application/json'
       end
 
       def encoded_data

@@ -16,15 +16,15 @@ module ActiveWebhook
       protected
 
       def self.component_name
-        "verification"
+        'verification'
       end
 
       def signature
-        raise NotImplementedError, "#signature must be implemented."
+        raise NotImplementedError, '#signature must be implemented.'
       end
 
       def strategy
-        self.class.name.delete_suffix("Adapter")
+        self.class.name.delete_suffix('Adapter')
       end
     end
   end

@@ -10,7 +10,6 @@ Features include:
 - Rate Limits
 - Cryptographic Signatures
 - Asynchronous Delivery
-- Buffered Delivery
 - Versioning
 
 ## What does an Active Webhook look like?
@@ -45,7 +44,7 @@ _See the [Configuration](https://github.com/amazing-jay/active_webhook#configura
 
 ## Requirements
 
-Active Webhook supports (_but does not require_) Rails 5+ and various queuing
+Active Webhook supports (_but does not require_) Rails 5+ and various queueing
 and delivery technologies (e.g. Sidekiq, Delayed Job, Active Job, Net HTTP, Faraday, etc.).
 
 ## Download and Installation
@@ -126,13 +125,15 @@ To trigger the delivery of a topic, simply execute `ActiveWebhook.trigger(key: k
 
 The `trigger` method accepts any number of optional kwarg arguments, some of which have special meaning:
 
-- `version` is a string that scopes delivery of Topics by version (if omitted, all topics with matching key will be triggered during the queuing phase).
-- `format_first` is a boolean that overrides the default configuration value during the queueing phase.
-- `data` is a hash that will become the payload body during the build phase
+- `version` is a string that scopes delivery of Topics by version (if omitted, all topics with matching key will be triggered during the queueing phase).
+- `format_first` is a boolean that causes the hook to be built syncronously (if omitted, the default configuration value is used during the queueing phase).
+- `data` is a hash that will become the payload body during the build phase (if omitted, a default payload body will be built).
 - `type` is a string that will become the value of the 'X-Webhook-Type' header during the build phase.
-- `max_errors_per_hour` is a integer that overrides the default configuration value during the delivery phase.
+- `max_errors_per_hour` is a integer that causes subscriptions to be disabled (if omitted, the default configuration value is used during the delivery phase).
 
 All other keyword arguments supplied will be passed forward to each adapter for later use by any customizations that you implement.
+
+_See the [Configuration](https://github.com/amazing-jay/active_webhook#configuration) Section for more information about default configuration options._
 
 Examples::
 
@@ -184,10 +185,11 @@ By way of example:
 
 class User < ApplicationRecord
   def send_reminder
-  # this:
-  trigger_webhook(:reminded)
-  # is more-or-less equivalent to an optomized version of this:
-  # ActiveWebhook.trigger(key: 'user/reminded', data: self.as_json, type: "resource")
+    # this:
+    trigger_webhook(:reminded)
+    # is more-or-less equivalent to an optimized version of this:
+    # ActiveWebhook.trigger(key: 'user/reminded', data: self.as_json, type: "resource")
+  end
 end
 ```
 
@@ -252,7 +254,7 @@ _NOTE: See `config/active_webhook.rb` for details about all available configurat
 
 ### Adapters
 
-Active Webhook ships with queuing and delivery adapters for:
+Active Webhook ships with queueing and delivery adapters for:
 
 - Sidekiq
 - BackgroundJob
@@ -264,7 +266,7 @@ To activate any adapter, simply uncomment the relevant declaration in the genera
 Active Webhook configuration file, and then install relevant dependencies (if any).
 
 For example, to activate the [sidekiq](https://github.com/mperham/sidekiq)
-queuing adapter:
+queueing adapter:
 
 ```ruby
 # in config/active_webhook.rb
@@ -484,6 +486,7 @@ The gem is available as open source under the terms of the
 
 ## ROADMAP
 
+* Add rubocop to travis build (or publish task)
 * Figure out flakey. specs
 * Add XML format
 * Dummy app; create a local subscription class
@@ -491,3 +494,6 @@ The gem is available as open source under the terms of the
 * Upgrade logger spec to expect stubbed logger to receive and call original (and drop the rest)
 * Disable subscriptions when jobs stop
 * Consolidate formatting adapters and configuration options into a single builder
+* Add buffered delivery
+* Memoize everything in all adapters
+- Add hook when error limit disabled subscribtion?

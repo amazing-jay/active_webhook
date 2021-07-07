@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "faraday"
+require 'faraday'
 
 module ActiveWebhook
   module Delivery

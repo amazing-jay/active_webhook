@@ -22,18 +22,19 @@ module ActiveWebhook
       end
 
       def self.fulfill_subscription(subscription:, hook: nil, **context)
-        ActiveWebhook.delivery_adapter.call(
-          subscription: subscription,
-          hook: hook || build_hook(subscription, **context),
-          **context
-        ) if ActiveWebhook.enabled?
+        if ActiveWebhook.enabled?
+          ActiveWebhook.delivery_adapter.call(
+            subscription: subscription,
+            hook: hook || build_hook(subscription, **context),
+            **context
+          )
+        end
         true
       end
 
       def fulfill_topic
         subscriptions.each do |subscription|
           hook = format_first ? self.class.build_hook(subscription, **context) : nil
-          byebug if context.key?("key")
           promise_subscription subscription: subscription, hook: hook
         end
         subscriptions.count
@@ -42,15 +43,15 @@ module ActiveWebhook
       protected
 
       def self.component_name
-        "queueing"
+        'queueing'
       end
 
       def promise_subscription(_subscription:, _hook:)
-        raise NotImplementedError, "#promise_subscription must be implemented."
+        raise NotImplementedError, '#promise_subscription must be implemented.'
       end
 
       def promise_topic
-        raise NotImplementedError, "#promise_topic must be implemented."
+        raise NotImplementedError, '#promise_topic must be implemented.'
       end
 
       def subscriptions

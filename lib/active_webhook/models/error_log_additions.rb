@@ -6,7 +6,7 @@ module ActiveWebhook
       extend ActiveSupport::Concern
 
       included do
-        self.table_name = "active_webhook_error_logs"
+        self.table_name = 'active_webhook_error_logs'
 
         validates_presence_of :subscription
       end

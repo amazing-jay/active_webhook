@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'awesome_print'
+
 module ActiveWebhook
   module Delivery
     class BaseAdapter < Adapter
@@ -20,9 +22,9 @@ module ActiveWebhook
 
           case status_code
           when 200
-            trace "Completed"
+            trace 'Completed'
           when 410
-            trace "Receieved HTTP response code [410] for"
+            trace 'Receieved HTTP response code [410] for'
             subscription.destroy!
           else
             raise response.to_s
@@ -31,11 +33,11 @@ module ActiveWebhook
       rescue StandardError => e
         subscription.error_logs.create!
 
-        raise e # propogate error so queuing adapter has a chance to retry
+        raise e # propogate error so queueing adapter has a chance to retry
       end
 
       def status_code
-        raise NotImplementedError, "#deliver! must be implemented."
+        raise NotImplementedError, '#deliver! must be implemented.'
       end
 
       def topic
@@ -45,36 +47,35 @@ module ActiveWebhook
       protected
 
       def self.component_name
-        "delivery"
+        'delivery'
       end
 
       def deliver!
-        raise NotImplementedError, "#deliver! must be implemented."
+        raise NotImplementedError, '#deliver! must be implemented.'
       end
 
       def ensure_error_log_requirement_is_met!
-        if subscription.ensure_error_log_requirement_is_met! max_errors_per_hour
-          trace "Disabled"
-        end
+        trace 'Disabled' if subscription.ensure_error_log_requirement_is_met! max_errors_per_hour
       end
 
       def wrap_with_log
         return if ActiveWebhook.disabled?
 
-        trace("Skipped [subscription disabled]") and return if subscription.disabled?
-        trace("Skipped [topic disabled]") and return if topic.disabled?
-        trace "Initiated"
+        trace('Skipped [subscription disabled]') and return if subscription.disabled?
+        trace('Skipped [topic disabled]') and return if topic.disabled?
+
+        trace 'Initiated'
         trace "Payload [#{hook.to_h.ai}] for", :debug if ActiveWebhook.logger.level == 0 # log_payloads
 
         yield
 
-        trace "Completed"
+        trace 'Completed'
 
         true
       rescue StandardError => e
         trace "Failed to complete [#{e.message}]", :error
 
-        raise e # propogate error so queuing adapter has a chance to retry
+        raise e # propogate error so queueing adapter has a chance to retry
       end
 
       def trace(msg, level = :info)

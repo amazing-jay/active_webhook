@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Simple, efficient, and extensible webhooks for Ruby."
   spec.description   = "Simple, efficient, and extensible webhooks for Ruby, including: Rate Limits, Cryptographic " \
-                       "Signatures, Asynchronous Delivery, Buffered Delivery, Versioning."
+                       "Signatures, Asynchronous Delivery, and Versioning."
   spec.homepage      = "https://github.com/amazing-jay/active_webhook"
   spec.license       = "MIT"
 
@@ -39,10 +39,10 @@ Gem::Specification.new do |spec|
   spec.require_paths               = ["lib"]
   spec.required_ruby_version       = ">= 2.5"
 
+  spec.add_dependency "awesome_print"
   spec.add_dependency "activerecord", ">= 5.0.0"
   spec.add_dependency "memoist"
 
-  spec.add_development_dependency "awesome_print", "~> 1.9.2"
   spec.add_development_dependency "bundler", "~> 1.17"
   spec.add_development_dependency "database_cleaner", "~> 2.0.1"
   spec.add_development_dependency "delayed_job_active_record", "~> 4.1.6"

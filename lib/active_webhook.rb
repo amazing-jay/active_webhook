@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
-require "active_record"
-require "memoist"
+require 'active_record'
+require 'memoist'
 
-require "active_webhook/adapter"
-require "active_webhook/delivery/base_adapter"
-require "active_webhook/formatting/base_adapter"
-require "active_webhook/queueing/base_adapter"
-require "active_webhook/verification/base_adapter"
+require 'active_webhook/adapter'
+require 'active_webhook/delivery/base_adapter'
+require 'active_webhook/formatting/base_adapter'
+require 'active_webhook/queueing/base_adapter'
+require 'active_webhook/verification/base_adapter'
 
-require "active_webhook/models/error_log_additions"
-require "active_webhook/models/subscription_additions"
-require "active_webhook/models/topic_additions"
+require 'active_webhook/models/error_log_additions'
+require 'active_webhook/models/subscription_additions'
+require 'active_webhook/models/topic_additions'
 
-require "active_webhook/callbacks"
-require "active_webhook/hook"
-require "active_webhook/error_log"
-require "active_webhook/logger"
-require "active_webhook/subscription"
-require "active_webhook/topic"
-require "active_webhook/version"
+require 'active_webhook/callbacks'
+require 'active_webhook/hook'
+require 'active_webhook/error_log'
+require 'active_webhook/logger'
+require 'active_webhook/subscription'
+require 'active_webhook/topic'
+require 'active_webhook/version'
 
 module ActiveWebhook
   class InvalidAdapterError < StandardError; end
@@ -27,7 +27,7 @@ module ActiveWebhook
   IDENTIFIER = "Active Webhook v#{VERSION}"
 
   # IDENTIFIER must be defined first
-  require "active_webhook/configuration"
+  require 'active_webhook/configuration'
 
   class << self
     attr_writer :enabled
@@ -59,7 +59,7 @@ module ActiveWebhook
 
       @@origin = (Rails.application.config.action_mailer.default_url_options[:host] if defined?(Rails))
     rescue StandardError
-      @@origin = ""
+      @@origin = ''
     end
 
     # TODO: change the next 4 methods to use memoized thread safe class var rather than configuration.enabled
@@ -91,7 +91,7 @@ module ActiveWebhook
 
     Configuration::ADAPTERS.each do |type|
       define_method "#{type}_adapter" do
-        fetch_adapter type, configuration.send(type).send("adapter")
+        fetch_adapter type, configuration.send(type).send('adapter')
       end
     end
 
@@ -111,7 +111,7 @@ module ActiveWebhook
             path = "active_webhook/#{type}/#{adapter}_adapter"
             require path
             const_name = path.camelize
-            ["http", "sha", "hmac", "json", "url"].each { |acronym| const_name.gsub!(acronym.camelize, acronym.upcase) }
+            ['http', 'sha', 'hmac', 'json', 'url'].each { |acronym| const_name.gsub!(acronym.camelize, acronym.upcase) }
             const_name.constantize
           end
         end

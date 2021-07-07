@@ -12,7 +12,7 @@ module ActiveWebhook
       protected
 
       def self.component_name
-        "formatting"
+        'formatting'
       end
 
       def url
@@ -28,11 +28,11 @@ module ActiveWebhook
       end
 
       def encoded_data
-        raise NotImplementedError, "#encoded_data must be implemented."
+        raise NotImplementedError, '#encoded_data must be implemented.'
       end
 
       def content_type
-        raise NotImplementedError, "#content_type must be implemented."
+        raise NotImplementedError, '#content_type must be implemented.'
       end
 
       def default_headers
@@ -49,7 +49,7 @@ module ActiveWebhook
           Time: time.to_s,
           Topic: topic.key,
           'Topic-Version': topic.version,
-          'Webhook-Type': type.presence || "event"
+          'Webhook-Type': type.presence || 'event'
         )
         h['Webhook-Id'] = job_id if job_id.present?
         h
@@ -80,7 +80,7 @@ module ActiveWebhook
       end
 
       def resource
-        resource_type.constantize.find_by(id: resource_id) if type == "resource" && resource_id && resource_type
+        resource_type.constantize.find_by(id: resource_id) if type == 'resource' && resource_id && resource_type
       rescue StandardError
         nil
       end
@@ -91,9 +91,9 @@ module ActiveWebhook
 
       def prefix
         @prefix ||= begin
-          x = ["X"]
+          x = ['X']
           x << component_configuration.custom_header_prefix
-          x.compact.join("-")
+          x.compact.join('-')
         end
       end
 

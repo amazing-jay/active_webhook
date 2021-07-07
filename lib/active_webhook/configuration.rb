@@ -35,7 +35,7 @@ module ActiveWebhook
           attr_reader option
 
           default = values&.first if default.nil? && !allow_nil
-          prefixes ||= name.deconstantize.underscore.delete_prefix("active_webhook").split("/")
+          prefixes ||= name.deconstantize.underscore.delete_prefix('active_webhook').split('/')
           prefixes.shift if prefixes.first.blank?
 
           @options ||= {}
@@ -53,7 +53,7 @@ module ActiveWebhook
                    (allow_nil && value.nil?) ||
                    values.empty? ||
                    values.include?(value)
-              raise Configuration::InvalidOptionError.new (prefixes + [option]).compact.join("."), value,
+              raise Configuration::InvalidOptionError.new (prefixes + [option]).compact.join('.'), value,
                                                           values
             end
 

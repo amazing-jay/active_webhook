@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "uri"
-require "net/http"
+require 'uri'
+require 'net/http'
 
 module ActiveWebhook
   module Delivery
@@ -20,7 +20,7 @@ module ActiveWebhook
         headers.each { |k, v| request[k] = v }
 
         http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = uri.scheme.casecmp("https").zero?
+        http.use_ssl = uri.scheme.casecmp('https').zero?
         http.request(request)
       end
     end

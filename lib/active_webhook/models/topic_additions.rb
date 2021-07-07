@@ -6,7 +6,7 @@ module ActiveWebhook
       extend ActiveSupport::Concern
 
       included do
-        self.table_name = "active_webhook_topics"
+        self.table_name = 'active_webhook_topics'
 
         scope :enabled, -> { where(disabled_at: nil) }
         scope :with_key, lambda { |key:, version: nil|
@@ -16,7 +16,7 @@ module ActiveWebhook
         }
 
         def self.last_with_key(key)
-          where(key: key).order(id: :desc).first
+          where(key: key).order(created_at: :desc).first
         end
 
         before_validation :set_valid_version
@@ -58,12 +58,12 @@ module ActiveWebhook
         return if version.present?
 
         last_with_key = self.class.last_with_key key
-        versions = last_with_key&.version.to_s.split(".")
+        versions = last_with_key&.version.to_s.split('.')
         versions = [0] if versions.empty?
         version = versions.pop
         versions << version.to_i + 1
 
-        self.version = versions.join(".")
+        self.version = versions.join('.')
       end
     end
   end

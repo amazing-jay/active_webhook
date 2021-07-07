@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "active_webhook"
+require 'active_webhook'
 
 ApplicationRecord.include ActiveWebhook::Callbacks
 
@@ -11,8 +11,8 @@ ActiveWebhook.configure do |c|
   # Specify a custom origin name to use for x-Domain header in outgoing webhooks
   # c.origin = 'http://'
 
-  # Format the payload BEFORE queuing for delivery.
-  # Helpful when queuing delay is problematic, but comes with the trade of poor performance profile.
+  # Format the payload BEFORE queueing for delivery.
+  # Helpful when queueing delay is problematic, but comes with the trade of poor performance profile.
   # c.formatting.format_first = true                  # << one of: [true, false]
 
   # Base class for Active Webhook Models (Subscription & Topic)
@@ -31,7 +31,7 @@ ActiveWebhook.configure do |c|
   # Bundler).
   #
   # For example, to activate the [sidekiq](https://github.com/mperham/sidekiq)
-  # queuing adapter:
+  # queueing adapter:
   #
   # ```ruby
   # # in config/active_webhook.rb

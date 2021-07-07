@@ -1,3 +1,9 @@
+
+This file is a scratchpad. Didn't bother formatting correctly. Not everything is even relevant anymore.
+
+
+
+
 ## inspired by
 
 `https://benediktdeicke.com/2017/09/sending-webhooks-with-rails/`
@@ -51,11 +57,11 @@ rails g model active_webhook/topic \
 1. add `config.queueing.delay` trigger(in: nil) => [1.second]
    - do not add to Topic or Subscription models (because they aren't loaded before check for performance reasons)
    - evaluate to config.nil? ? method.option : config.value
-   - configure each queuing adapter to pass delay to underlying implementation
+   - configure each queueing adapter to pass delay to underlying implementation
 
 1. add `config.buffering.adapter` => [:disabled, :enabled, Buffering::BaseAdapter]
    - introduce shim into queueing/base_adapter#call that passes to active_webbhook/buffer/*adapter and back
-   - make sure that all queuing adapters delay after buffer is flushed
+   - make sure that all queueing adapters delay after buffer is flushed
    - add buffer/disabled_adapter and buffer/enabled_adapter
    - implement as follows:
      - if enabled, require `request_store`
@@ -82,16 +88,16 @@ rails g model active_webhook/topic \
 1. add `config.delivery.retry_count` and trigger(retry_count: nil, **) [true, false]
    - do not add to Topic or Subscription models (because they aren't loaded before check for performance reasons)
    - evaluate to config.nil? ? method.option : config.value
-   - solve how to specify retry count with exponential backoff for each queuing adapter
+   - solve how to specify retry count with exponential backoff for each queueing adapter
    - match option name to active_job
 
 1. add `config.delivery.time_limit` and trigger(time_limit: nil, **) [true, false]
    - do not add to Topic or Subscription models (because they aren't loaded before check for performance reasons)
    - evaluate to config.nil? ? method.option : config.value
-   - solve how to specify time limit for each queuing adapter
+   - solve how to specify time limit for each queueing adapter
    - match option name to active_job
 
-1. add jid to context in syncronous queuing adapter (if possible)
+1. add jid to context in syncronous queueing adapter (if possible)
    - solve how to generate an auto increment Id across servers (maybe hash or hex a server id and counter; could store server in db and load on start)
    - https://www.google.com/search?q=rails+set+global+variable+per+request&client=safari&hl=en-us&ei=xF3NYKDaKYX_-wSAu5KIAw&oq=rails+set+global+variable+per+request
 

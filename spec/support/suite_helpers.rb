@@ -44,7 +44,7 @@ module SuiteHelpers
   end
 
   # USAGE
-  # expect_hooks_around(
+  # expect_requests(
   #   [
   #     subscription,
   #     other_subscription,

@@ -2,7 +2,7 @@
 
 module ActiveWebhook
   Hook = Struct.new :url, :headers, :body do
-    def self.from_h(url: '', headers: {}, body: "")
+    def self.from_h(url: '', headers: {}, body: '')
       new url, headers, body
     end
   end

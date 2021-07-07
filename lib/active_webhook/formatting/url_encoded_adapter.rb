@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "addressable/uri"
+require 'addressable/uri'
 
 module ActiveWebhook
   module Formatting
@@ -8,14 +8,14 @@ module ActiveWebhook
       protected
 
       def self.compact(h)
-        h.delete_if { |k, v|
+        h.delete_if do |_k, v|
           v = compact(v) if v.respond_to?(:each)
           v.nil? || v.empty?
-        }
+        end
       end
 
       def content_type
-        "application/x-www-form-urlencoded"
+        'application/x-www-form-urlencoded'
       end
 
       def encoded_data
